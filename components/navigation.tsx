@@ -21,7 +21,7 @@ const StyledButton = withStyles({
 
 export default function ClassesShorthand() {
   return <div>
-      <StyledButton> <b>Home</b></StyledButton>
+      <StyledButton href="./"> <b>Home</b></StyledButton>
       <StyledButton><b>Most Popular Coming Soon...</b></StyledButton>
   </div>
 }
