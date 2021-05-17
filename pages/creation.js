@@ -5,7 +5,8 @@ import NameDescription from '../components/nameDescription.tsx'
 import MusicalGIF from '../components/MusicalGIF.tsx'
 import CaptionBar from '../components/captionBar.tsx'
 
-export default function Home() {
+export default function Creation() {
+  const caption = typeof window !== 'undefined' ? localStorage.getItem("caption") : null;
   return (
     <div className={styles.container}>
       <Head>
@@ -17,10 +18,8 @@ export default function Home() {
           <center>
           <Navigation/>
           </center>
-          <NameDescription/>
           <center>
-            <MusicalGIF caption="Musical GIF will not give up on your musical GIF needs"/>
-            <CaptionBar/>
+            <MusicalGIF caption={caption}/>
           </center>
 
        </div>

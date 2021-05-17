@@ -9,11 +9,13 @@ import ReactPlayer from 'react-player/soundcloud'
 
 const useStyles = makeStyles({
   root: {
+    margin: "1.5rem 1.5rem"
   }
 });
 
-export default function MusicalGIF() {
+export default function MusicalGIF(props) {
   const classes = useStyles();
+  const caption = props.caption;
 
   return (
     <Card className={classes.root}>
@@ -26,7 +28,7 @@ export default function MusicalGIF() {
         />
         <CardContent>
           <Typography variant="body2" color="secondary" component="p">
-            Musical GIF will not give up on your musical GIF needs
+            {caption}
           </Typography>
         </CardContent>
         <ReactPlayer 
