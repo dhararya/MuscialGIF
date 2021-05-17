@@ -1,19 +1,28 @@
 .container {
   min-height: 100vh;
-  padding: 0.5rem 0.5rem;
+  padding: -2rem -4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #710193;
+  min-width: 100vw;
+  padding: 2rem 2rem;
 }
 
 .body {
-  width: 80%;
+  width: 100%;
   max-width: 68rem;
-  margin: 0 auto;
+  margin: 0;
   background-color: #ffffff;
-  padding: 4rem 4rem;
+}
+
+.innerbody {
+  width: 100%;
+  max-width: 68rem;
+  margin: 0;
+  background-color: #ffffff;
+  padding: 2rem 4rem;
 }
 
 @media (max-width: 600px) {
