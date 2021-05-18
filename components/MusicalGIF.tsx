@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import ReactPlayer from 'react-player/soundcloud'
+import ReactPlayer from 'react-player/soundcloud';
+import { GiphyFetch } from "@giphy/js-fetch-api";
+import { IGif } from "@giphy/js-types";
+import { Gif } from "@giphy/react-components";
+import { useAsync } from "react-async-hook";
 
 const useStyles = makeStyles({
   root: {
@@ -16,16 +20,22 @@ const useStyles = makeStyles({
 export default function MusicalGIF(props) {
   const classes = useStyles();
   const caption = props.caption;
+  const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
+
+  function GifDemo() {
+    const [gif, setGif] = useState<IGif | null>(null);
+    useAsync(async () => {
+      const result = await giphyFetch.search(caption, {sort: "relevant", limit: 1});
+      const { data } = result.data.length!==0 ? await giphyFetch.gif(String(result.data[0].id)) : await giphyFetch.gif("UoeaPqYrimha6rdTFV");
+      setGif(data);
+    }, []);
+    return gif && <Gif gif={gif} width={700} />
+  }
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Never Gonna Give You Up GIF"
-          height="50%"
-          src="https://media1.giphy.com/media/kFgzrTt798d2w/giphy.gif?cid=ecf05e47c64xiyjfzszgaeiyozbmsiqrg9wcwi7xwnqhnvkd&rid=giphy.gif&ct=g"
-        />
+        {GifDemo()}
         <CardContent>
           <Typography variant="body2" color="secondary" component="p">
             {caption}

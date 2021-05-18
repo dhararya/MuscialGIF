@@ -19,7 +19,7 @@ export default function Home() {
           </center>
           <NameDescription/>
           <center>
-            <MusicalGIF caption="Musical GIF will not give up on your musical GIF needs"/>
+            <MusicalGIF caption="Musical GIF will never give you up"/>
             <CaptionBar/>
           </center>
 
