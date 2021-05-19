@@ -4,6 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import {navigate} from "@reach/router"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,12 @@ export default function ComposedTextField() {
     localStorage.setItem("caption", event.target.value);
   };
 
+  const handleKeyPress = (event) => {
+    if(event.charCode==13){
+      navigate('/creation')
+    }
+  };
+
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <FormControl variant="outlined">
@@ -31,6 +38,7 @@ export default function ComposedTextField() {
           id="component-outlined"
           value={name}
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
           label="Caption"
         />
         <Button
