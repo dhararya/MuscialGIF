@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -10,7 +10,7 @@ import { IGif } from "@giphy/js-types";
 import { Gif } from "@giphy/react-components";
 import { useAsync } from "react-async-hook";
 import { v4 as uuidv4 } from 'uuid';
-
+import { waitForDebugger } from "node:inspector";
 const useStyles = makeStyles({
   root: {
     margin: "1.5rem 1.5rem"
@@ -34,49 +34,57 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 "https://soundcloud.com/search?q=sandstorm", "https://soundcloud.com/kn900/ppap"];
 
 export default function MusicalGIF(props) {
+  const [gif, setGif] = useState<IGif | null>(null);
+  const [gifID, setgifID] = useState("y1ZBcOGOOtlpC");
   const classes = useStyles();
-  let caption = props.caption;
+  const caption = props.caption;
+  const [displayCaption, setdisplayCaption] = useState(caption);
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
+  
+  useEffect(() => {
+    fetchGifID();
+  }, [caption])
 
-
-  let getGifID = async () => {
-    const result = await giphyFetch.search(caption, {sort: "relevant", limit: 1});
+  const fetchGifID = useCallback(async () => {
+    const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 1});
+    if (result.data.length!==0){
+      setgifID(String(result.data[0].id));
+    } 
     if (result.data.length===0){
-      caption = "No results found!";
+      setdisplayCaption("No results found!");
     }
-    return result.data.length!==0 ? String(result.data[0].id) :"UoeaPqYrimha6rdTFV";
-  };
 
-  let gif_id = getGifID();
+    
+  
+  }, [caption])
 
-  function GifDemo() {
-    const [gif, setGif] = useState<IGif | null>(null);
-    useAsync(async () => {
-      const { data } = await giphyFetch.gif(String(gif_id));
-      setGif(data);
-    }, []);
-    return gif && <Gif gif={gif} width={700}/>
-  }
+  useEffect(() => {
+    fetchGif();
+  }, [gifID])
 
-  function returnURL(){{
-    if (caption==="No results found!"){
-      return "https://soundcloud.com/fesstheron/crying-noises-wow"
-    } else if (caption==="Musical GIF will never give you up"){
+  const sound = returnSoundURL();
+
+  const fetchGif = useCallback(async () => {
+    const { data } = await giphyFetch.gif(gifID);
+    setGif(data);}, [gifID])
+
+  function returnSoundURL(){{
+    if (displayCaption==="No results found!"){
+      return "https://soundcloud.com/soundeffectsforfree/baby-crying-sound-effect"
+    } else if (displayCaption==="Musical GIF will never give you up"){
       return "https://soundcloud.com/thepopposse/never-gonna-give-you-up"
     } else {
       return sounds[Math.floor(Math.random()*sounds.length)]
     }
   }}
 
-  const sound = returnURL();
-
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        {GifDemo()}
+        {gif && <Gif gif={gif} width={700}/>}
         <CardContent>
           <Typography variant="body2" color="secondary" component="p">
-            {caption}
+            {displayCaption}
           </Typography>
         </CardContent>
         <ReactPlayer 
