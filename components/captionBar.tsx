@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ComposedTextField() {
-  const [name, setName] = React.useState("Insert your custom caption here");
+  const [name, setName] = React.useState("");
   const classes = useStyles();
 
   const handleChange = (event) => {
