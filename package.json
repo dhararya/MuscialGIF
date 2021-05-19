@@ -18,6 +18,7 @@
     "react": "17.x",
     "react-async-hook": "^3.6.2",
     "react-dom": "17.x",
-    "react-player": "^2.9.0"
+    "react-player": "^2.9.0",
+    "uuidv4": "^6.2.8"
   }
 }

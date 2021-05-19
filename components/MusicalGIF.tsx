@@ -9,12 +9,15 @@ import { GiphyFetch } from "@giphy/js-fetch-api";
 import { IGif } from "@giphy/js-types";
 import { Gif } from "@giphy/react-components";
 import { useAsync } from "react-async-hook";
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles({
   root: {
     margin: "1.5rem 1.5rem"
   }
 });
+
+const uniqueLinkExt = uuidv4();
 
 const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soundcloud.com/hampsterdancemasters/the-hamster-dance-song",
 "https://soundcloud.com/tayzonday/chocolate-rain",  "https://soundcloud.com/tayzonday/chocolate-rain", "https://soundcloud.com/thepopposse/never-gonna-give-you-up",
@@ -35,15 +38,22 @@ export default function MusicalGIF(props) {
   let caption = props.caption;
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
 
+
+  let getGifID = async () => {
+    const result = await giphyFetch.search(caption, {sort: "relevant", limit: 1});
+    if (result.data.length===0){
+      caption = "No results found!";
+    }
+    return result.data.length!==0 ? String(result.data[0].id) :"UoeaPqYrimha6rdTFV";
+  };
+
+  let gif_id = getGifID();
+
   function GifDemo() {
     const [gif, setGif] = useState<IGif | null>(null);
     useAsync(async () => {
-      const result = await giphyFetch.search(caption, {sort: "relevant", limit: 1});
-      const { data } = result.data.length!==0 ? await giphyFetch.gif(String(result.data[0].id)) : await giphyFetch.gif("UoeaPqYrimha6rdTFV");
+      const { data } = await giphyFetch.gif(String(gif_id));
       setGif(data);
-      if (result.data.length===0){
-        caption = "No results found!";
-      }
     }, []);
     return gif && <Gif gif={gif} width={700}/>
   }
@@ -58,6 +68,8 @@ export default function MusicalGIF(props) {
     }
   }}
 
+  const sound = returnURL();
+
   return (
     <Card className={classes.root}>
       <CardActionArea>
@@ -68,7 +80,7 @@ export default function MusicalGIF(props) {
           </Typography>
         </CardContent>
         <ReactPlayer 
-            url= {returnURL()}
+            url= {sound}
             height= {100}
             playing= {true}
             
