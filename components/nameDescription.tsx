@@ -19,7 +19,7 @@ export default function NameDescription() {
         <b>Musical GIF</b>
       </Typography>
       <Typography variant="body1" gutterBottom>
-        Musical GIF is service that takes in a custom caption, and returns an appropriate GIF and Soundcloud2 song to play with it. Below, is an example of what can be created. Try it yourself now!
+        Musical GIF is service that takes in a custom caption, and returns an appropriate GIF and random Soundcloud song to play with it. Below, is an example of what can be created. Try it yourself now!
       </Typography>
     </div>
   );

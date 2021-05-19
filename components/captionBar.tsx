@@ -4,6 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import {navigate} from "@reach/router"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,12 +16,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ComposedTextField() {
-  const [name, setName] = React.useState("Insert your custom caption here");
+  const [name, setName] = React.useState("");
   const classes = useStyles();
 
   const handleChange = (event) => {
     setName(event.target.value);
     localStorage.setItem("caption", event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if(event.charCode==13){
+      navigate('/creation')
+    }
   };
 
   return (
@@ -31,6 +38,7 @@ export default function ComposedTextField() {
           id="component-outlined"
           value={name}
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
           label="Caption"
         />
         <Button
