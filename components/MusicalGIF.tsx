@@ -105,9 +105,9 @@ export default function MusicalGIF(props) {
   }}
   
   function createPage(){
-  if (displayCaption !== "No results found!" && displayCaption !== "Musical GIF will never give you up") {
+  if (displayCaption !== "No results found!" && displayCaption !== "Musical GIF will never give you up" && displayCaption!=="Invalid Link!") {
     db.collection("creation").add({
-      link: uniqueLinkExt,
+      linkExt: String(uniqueLinkExt),
       caption: displayCaption,
       gif_id: gifID,
       sound: {sound},
