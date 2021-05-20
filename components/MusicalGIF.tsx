@@ -15,6 +15,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 const useStyles = makeStyles({
   root: {
     margin: "1.5rem 1.5rem"
@@ -28,10 +29,9 @@ const useStyles = makeStyles({
 );
 
 const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soundcloud.com/hampsterdancemasters/the-hamster-dance-song",
-"https://soundcloud.com/tayzonday/chocolate-rain",  "https://soundcloud.com/tayzonday/chocolate-rain", "https://soundcloud.com/thepopposse/never-gonna-give-you-up",
-"https://soundcloud.com/thepopposse/never-gonna-give-you-up", "https://soundcloud.com/thepopposse/never-gonna-give-you-up",
+"https://soundcloud.com/tayzonday/chocolate-rain",  "https://soundcloud.com/tayzonday/chocolate-rain", 
 "https://soundcloud.com/xpriteshx/fatality-mortal-kombat-sound-effect", "https://soundcloud.com/mlg_getrekt/sad-violin-music-mlg-sound-1",
-"https://soundcloud.com/tom-m-c/what-are-you-doing-in-my-swamp", 
+"https://soundcloud.com/tom-m-c/what-are-you-doing-in-my-swamp", "https://soundcloud.com/thepopposse/never-gonna-give-you-up",
 "https://soundcloud.com/tornupto-12/deja-vu-meme", "https://soundcloud.com/alexis-tapia-najar/run-vine-sound-effect-mp3-1",
 "https://soundcloud.com/user-992367524/they-ask-you-how-you-areand-youre-not-really-fine-meme", "https://soundcloud.com/blackout-the-gearhead/mr-krabs-astronomia-coffin-dance-meme-4ydngbcnaze",
 "https://soundcloud.com/remaings/ladies-and-gentlemen-we-got-em-meme", "https://soundcloud.com/danyal-460888021/cj-gta-ah-shit-here-we-go-again-green-screen", "https://soundcloud.com/magnus-theil-jensen/fbi-open-up",
@@ -99,6 +99,22 @@ export default function MusicalGIF(props) {
     }
   }, [gifID])
 
+  function generateLinkButton(){
+    let url = ""
+    if (typeof window !== 'undefined'){
+      url = window.location.href
+    }
+    if (!isSet){
+      return <CopyToClipboard text={url}><Button
+      variant="contained"
+      color="primary"
+      disabled = {false}
+      > GENERATE AND COPY UNIQUE LINK TO CLIPBOARD
+      </Button>
+      </CopyToClipboard> 
+    }
+  }
+
   const fetchGif = useCallback(async () => {
     const { data } = await giphyFetch.gif(gifID);
     setGif(data);
@@ -162,6 +178,8 @@ export default function MusicalGIF(props) {
         >
           Generate Musical GIF
         </Button>
+
+        {generateLinkButton()}
       </FormControl>
     </form>
   </div>
