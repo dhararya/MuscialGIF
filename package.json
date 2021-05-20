@@ -17,6 +17,7 @@
     "next": "10.x",
     "react": "17.x",
     "react-async-hook": "^3.6.2",
+    "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "17.x",
     "react-player": "^2.9.0",
     "uuidv4": "^6.2.8"
