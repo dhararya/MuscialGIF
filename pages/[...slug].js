@@ -41,7 +41,7 @@ export default function Page({caption, sound, gifID}){
           </center>
           <NameDescription/>
           <center>
-            <MusicalGIF caption={caption} gifID={gifID} sound={sound}/>
+            <MusicalGIF caption={caption} gifID={gifID} sound={String(sound)} isSet={true}/>
           </center>
 
        </div>

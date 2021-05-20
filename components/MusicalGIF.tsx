@@ -44,6 +44,7 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 export default function MusicalGIF(props) {
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
   const classes = useStyles();
+  const [isSet, setisSet] = useState(props.isSet);
   const [uniqueLinkExt, setuniqueLinkExt] = useState(props.linkExt);
   const [gif, setGif] = useState<IGif | null>(null);
   const [gifID, setgifID] = useState(props.gifID);
@@ -56,37 +57,46 @@ export default function MusicalGIF(props) {
   };
 
   function handleClick(e){
-    setdisplayCaption(name);
+    setdisplayCaption(name)
+    setisSet(false);
   };
 
   function handleKeyPress(e){
     if (e.charCode === 13){
       e.preventDefault();
       setdisplayCaption(name);
+      setisSet(false);
     }
   }
-  
-  useEffect(() => {
-    fetchGifID();
-  }, [displayCaption])
+
 
   const fetchGifID = useCallback(async () => {
-    const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 7});
-    if (result.data.length!==0){
-      let randInt = Math.floor(Math.random()*result.data.length);
-      setgifID(String(result.data[randInt].id));
+    if (!isSet){
+      const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 7});
+      if (result.data.length!==0){
+        let randInt = Math.floor(Math.random()*result.data.length);
+        setgifID(String(result.data[randInt].id));
+      } else {
+        setdisplayCaption("No results found!");
+        setgifID("UoeaPqYrimha6rdTFV")
+      }
     } else {
-      setdisplayCaption("No results found!");
-      setgifID("UoeaPqYrimha6rdTFV")
+      setgifID(props.gifID);
     }
   
+  }, [displayCaption])
+
+  useEffect(() => {
+    fetchGifID();
   }, [displayCaption])
 
   useEffect(() => {
     fetchGif();
     returnSoundURL();
-    setuniqueLinkExt(uuidv4());
-    createPage();
+    if (!isSet){
+      setuniqueLinkExt(String(uuidv4()));
+      createPage();
+    }
   }, [gifID])
 
   const fetchGif = useCallback(async () => {
@@ -95,7 +105,9 @@ export default function MusicalGIF(props) {
     }, [gifID])
 
   function returnSoundURL(){{
-    if (displayCaption==="No results found!"){
+    if (isSet){
+      setSound(props.sound);
+    } else if (displayCaption==="No results found!"){
       setSound("https://soundcloud.com/soundeffectsforfree/baby-crying-sound-effect");
     } else if (displayCaption==="Musical GIF will never give you up"){
       setSound("https://soundcloud.com/thepopposse/never-gonna-give-you-up");
@@ -110,7 +122,7 @@ export default function MusicalGIF(props) {
       linkExt: String(uniqueLinkExt),
       caption: displayCaption,
       gif_id: gifID,
-      sound: {sound},
+      sound: String(sound),
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
   }
