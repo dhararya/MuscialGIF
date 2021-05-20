@@ -11,13 +11,21 @@ import { Gif } from "@giphy/react-components";
 import { v4 as uuidv4 } from 'uuid';
 import { db } from "../utils/firebase/firebase";
 import firebase from "firebase/app";
+import FormControl from "@material-ui/core/FormControl";
+import Button from "@material-ui/core/Button";
+import InputLabel from "@material-ui/core/InputLabel";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 const useStyles = makeStyles({
   root: {
     margin: "1.5rem 1.5rem"
+  },
+  form: {
+    "& > *": {
+      width: "100ch"
+    }
   }
-});
-
-const uniqueLinkExt = uuidv4();
+  }
+);
 
 const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soundcloud.com/hampsterdancemasters/the-hamster-dance-song",
 "https://soundcloud.com/tayzonday/chocolate-rain",  "https://soundcloud.com/tayzonday/chocolate-rain", "https://soundcloud.com/thepopposse/never-gonna-give-you-up",
@@ -34,32 +42,50 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 "https://soundcloud.com/search?q=sandstorm", "https://soundcloud.com/kn900/ppap"];
 
 export default function MusicalGIF(props) {
-  const [gif, setGif] = useState<IGif | null>(null);
-  const [gifID, setgifID] = useState("y1ZBcOGOOtlpC");
-  const classes = useStyles();
-  const caption = props.caption;
-  const [displayCaption, setdisplayCaption] = useState(caption);
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
-  const sound = returnSoundURL();
+  const classes = useStyles();
+  const uniqueLinkExt = uuidv4();
+  const [gif, setGif] = useState<IGif | null>(null);
+  const [gifID, setgifID] = useState(props.gifID);
+  const [displayCaption, setdisplayCaption] = useState(props.caption);
+  const [name, setName] = React.useState("");
+  const [sound, setSound] = React.useState("https://soundcloud.com/thepopposse/never-gonna-give-you-up")
+
+  function handleChange(e){
+      setName(e.target.value);
+  };
+
+  function handleClick(e){
+    setdisplayCaption(name);
+  };
+
+  function handleKeyPress(e){
+    if (e.charCode === 13){
+      e.preventDefault();
+      setdisplayCaption(name);
+    }
+  }
   
   useEffect(() => {
     fetchGifID();
-  }, [caption])
+  }, [displayCaption])
 
   const fetchGifID = useCallback(async () => {
-    const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 1});
+    const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 7});
     if (result.data.length!==0){
-      setgifID(String(result.data[0].id));
+      let randInt = Math.floor(Math.random()*result.data.length);
+      setgifID(String(result.data[randInt].id));
     } else {
       setdisplayCaption("No results found!");
       setgifID("UoeaPqYrimha6rdTFV")
     }
   
-  }, [caption])
+  }, [displayCaption])
 
   useEffect(() => {
     fetchGif();
     createPage();
+    returnSoundURL();
   }, [gifID])
 
   const fetchGif = useCallback(async () => {
@@ -69,13 +95,14 @@ export default function MusicalGIF(props) {
 
   function returnSoundURL(){{
     if (displayCaption==="No results found!"){
-      return "https://soundcloud.com/soundeffectsforfree/baby-crying-sound-effect"
+      setSound("https://soundcloud.com/soundeffectsforfree/baby-crying-sound-effect");
     } else if (displayCaption==="Musical GIF will never give you up"){
-      return "https://soundcloud.com/thepopposse/never-gonna-give-you-up"
+      setSound("https://soundcloud.com/thepopposse/never-gonna-give-you-up");
     } else {
-      return sounds[Math.floor(Math.random()*sounds.length)]
+      setSound(sounds[Math.floor(Math.random()*sounds.length)]);
     }
   }}
+  
   function createPage(){
   if (gifID != "y1ZBcOGOOtlpC" && gifID !="UoeaPqYrimha6rdTFV" && displayCaption != "Musical GIF will never give you up") {
     db.collection("creation").add({
@@ -89,21 +116,41 @@ export default function MusicalGIF(props) {
   }
 
   return (
-    <Card className={classes.root}>
-      <CardActionArea>
-        {gif && <Gif gif={gif} width={700}/>}
-        <CardContent>
-          <Typography variant="body2" color="secondary" component="p">
-            {displayCaption}
-          </Typography>
-        </CardContent>
-        <ReactPlayer 
-            url= {sound}
-            height= {100}
-            playing= {true}
-            
-         />
-      </CardActionArea>
-    </Card>
+    <div>
+      <Card className={classes.root}>
+        <CardActionArea>
+          {gif && <Gif gif={gif} width={700}/>}
+          <CardContent>
+            <Typography variant="body2" color="secondary" component="p">
+              {displayCaption}
+            </Typography>
+          </CardContent>
+          <ReactPlayer 
+              url= {sound}
+              height= {100}
+              playing= {true}
+              
+          />
+        </CardActionArea>
+      </Card>
+      <form className={classes.form} noValidate autoComplete="off">
+      <FormControl variant="outlined">
+        <InputLabel htmlFor="component-outlined">Caption</InputLabel>
+        <OutlinedInput
+          id="component-outlined"
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          label="Caption"
+        />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleClick}
+        >
+          Generate Musical GIF
+        </Button>
+      </FormControl>
+    </form>
+  </div>
   );
 }
