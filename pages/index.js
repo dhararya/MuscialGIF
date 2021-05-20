@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Navigation from '../components/navigation.tsx'
 import NameDescription from '../components/nameDescription.tsx'
 import MusicalGIF from '../components/MusicalGIF.tsx'
-import CaptionBar from '../components/captionBar.tsx'
 
 export default function Home() {
+  let caption = "Musical GIF will never give you up";
+  let sound = "https://soundcloud.com/thepopposse/never-gonna-give-you-up";
+  let gifID = "lW9XPLjNXyDDO"
   return (
     <div className={styles.container}>
       <Head>
@@ -15,12 +16,10 @@ export default function Home() {
       <body className={styles.body}>
         <div className={styles.innerbody}>
           <center>
-          <Navigation/>
           </center>
           <NameDescription/>
           <center>
-            <MusicalGIF caption="Musical GIF will never give you up"/>
-            <CaptionBar/>
+            <MusicalGIF caption={caption} gifID={gifID} sound={sound} isSet={false}/>
           </center>
 
        </div>
