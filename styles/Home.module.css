@@ -1,13 +1,13 @@
 .container {
-  min-height: 100vh;
   padding: -2rem -4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #710193;
-  min-width: 100vw;
   padding: 2rem 2rem;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 
 .body {
