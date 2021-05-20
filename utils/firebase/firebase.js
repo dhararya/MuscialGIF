@@ -9,9 +9,12 @@ var firebaseConfig = {
     messagingSenderId: "961424392430", 
     appId: "1:961424392430:web:825bf0e540c351397ab3ff", 
     measurementId: "G-GC7NWJ4W7J"};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}else {
+   firebase.app(); // if already initialized, use that one
+}
 
 const db = firebase.firestore();
 

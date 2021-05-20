@@ -8,9 +8,9 @@ import ReactPlayer from 'react-player/soundcloud';
 import { GiphyFetch } from "@giphy/js-fetch-api";
 import { IGif } from "@giphy/js-types";
 import { Gif } from "@giphy/react-components";
-import { useAsync } from "react-async-hook";
 import { v4 as uuidv4 } from 'uuid';
-import { waitForDebugger } from "node:inspector";
+import { db } from "../utils/firebase/firebase";
+import firebase from "firebase/app";
 const useStyles = makeStyles({
   root: {
     margin: "1.5rem 1.5rem"
@@ -30,7 +30,7 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 "https://soundcloud.com/childish-gambino", "https://soundcloud.com/britarnya/america-fuck-yeah", "https://soundcloud.com/cherrykachu/wide-putin-meme",
 "https://soundcloud.com/untamed-spirit/funny-minecraft-villager", "https://soundcloud.com/jeff-jeff-153823913/french-meme-song",
 "https://soundcloud.com/user-307209404", "https://soundcloud.com/search?q=coronavirus%20cardib", "https://soundcloud.com/your_text_spoken/hello-darkness-my-old-friend",
-"https://soundcloud.com/baauer/harlem-shake", "https://soundcloud.com/search?q=spongebob%20song", "https://soundcloud.com/pawpaw-114353728",
+"https://soundcloud.com/baauer/harlem-shake", "https://soundcloud.com/pawpaw-114353728",
 "https://soundcloud.com/search?q=sandstorm", "https://soundcloud.com/kn900/ppap"];
 
 export default function MusicalGIF(props) {
@@ -40,6 +40,7 @@ export default function MusicalGIF(props) {
   const caption = props.caption;
   const [displayCaption, setdisplayCaption] = useState(caption);
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
+  const sound = returnSoundURL();
   
   useEffect(() => {
     fetchGifID();
@@ -49,24 +50,22 @@ export default function MusicalGIF(props) {
     const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 1});
     if (result.data.length!==0){
       setgifID(String(result.data[0].id));
-    } 
-    if (result.data.length===0){
+    } else {
       setdisplayCaption("No results found!");
+      setgifID("UoeaPqYrimha6rdTFV")
     }
-
-    
   
   }, [caption])
 
   useEffect(() => {
     fetchGif();
+    createPage();
   }, [gifID])
-
-  const sound = returnSoundURL();
 
   const fetchGif = useCallback(async () => {
     const { data } = await giphyFetch.gif(gifID);
-    setGif(data);}, [gifID])
+    setGif(data);
+    }, [gifID])
 
   function returnSoundURL(){{
     if (displayCaption==="No results found!"){
@@ -77,6 +76,17 @@ export default function MusicalGIF(props) {
       return sounds[Math.floor(Math.random()*sounds.length)]
     }
   }}
+  function createPage(){
+  if (gifID != "y1ZBcOGOOtlpC" && gifID !="UoeaPqYrimha6rdTFV" && displayCaption != "Musical GIF will never give you up") {
+    db.collection("creation").add({
+      link: uniqueLinkExt,
+      caption: displayCaption,
+      gif_id: gifID,
+      sound: {sound},
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+  }
+  }
 
   return (
     <Card className={classes.root}>
