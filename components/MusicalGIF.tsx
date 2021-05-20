@@ -44,12 +44,12 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 export default function MusicalGIF(props) {
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
   const classes = useStyles();
-  const uniqueLinkExt = uuidv4();
+  const [uniqueLinkExt, setuniqueLinkExt] = useState(props.linkExt);
   const [gif, setGif] = useState<IGif | null>(null);
   const [gifID, setgifID] = useState(props.gifID);
   const [displayCaption, setdisplayCaption] = useState(props.caption);
   const [name, setName] = React.useState("");
-  const [sound, setSound] = React.useState("https://soundcloud.com/thepopposse/never-gonna-give-you-up")
+  const [sound, setSound] = React.useState(props.sound)
 
   function handleChange(e){
       setName(e.target.value);
@@ -84,8 +84,9 @@ export default function MusicalGIF(props) {
 
   useEffect(() => {
     fetchGif();
-    createPage();
     returnSoundURL();
+    setuniqueLinkExt(uuidv4());
+    createPage();
   }, [gifID])
 
   const fetchGif = useCallback(async () => {

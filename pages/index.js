@@ -4,6 +4,10 @@ import NameDescription from '../components/nameDescription.tsx'
 import MusicalGIF from '../components/MusicalGIF.tsx'
 
 export default function Home() {
+  let caption = "Musical GIF will never give you up";
+  let sound = "https://soundcloud.com/thepopposse/never-gonna-give-you-up";
+  let gifID = "lW9XPLjNXyDDO"
+  let linkExt = ""
   return (
     <div className={styles.container}>
       <Head>
@@ -16,7 +20,7 @@ export default function Home() {
           </center>
           <NameDescription/>
           <center>
-            <MusicalGIF caption="Musical GIF will never give you up" gifID="lW9XPLjNXyDDO" sound="https://soundcloud.com/thepopposse/never-gonna-give-you-up"/>
+            <MusicalGIF caption={caption} gifID={gifID} sound={sound} linkExt={linkExt}/>
           </center>
 
        </div>
