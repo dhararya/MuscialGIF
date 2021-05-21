@@ -6,13 +6,18 @@ import { useRouter } from 'next/router'
 import React, { useState } from "react";
 import { db } from "../utils/firebase/firebase";
 
+
+//Fetches data from Firebase based on URL entered
 export async function getServerSideProps(context) {
+    //default caption, sound and gifID
     let caption = "Invalid Link!";
     let sound = "https://soundcloud.com/soundeffectsforfree/baby-crying-sound-effect";
     let gifID = "UoeaPqYrimha6rdTFV";
     
     const url = context.req.url;
+    //gets the unique link extension
     const subdomain = url.split('/')[1]
+    //fetching data
     const docs = await db.collection("creation")
         .where("linkExt", "==", String(subdomain))
         .get();
