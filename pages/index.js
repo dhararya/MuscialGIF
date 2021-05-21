@@ -11,6 +11,7 @@ export default function Home() {
     <div className={styles.container}>
       <Head>
         <title>Musical GIF</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height"></meta>
       </Head>
 
       <body className={styles.body}>
