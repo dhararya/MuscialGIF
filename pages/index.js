@@ -4,6 +4,7 @@ import NameDescription from '../components/nameDescription.tsx'
 import MusicalGIF from '../components/MusicalGIF.tsx'
 
 export default function Home() {
+  //Home page data default
   let caption = "Musical GIF will never give you up";
   let sound = "https://soundcloud.com/thepopposse/never-gonna-give-you-up";
   let gifID = "lW9XPLjNXyDDO"

@@ -15,6 +15,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+//Styles for the component
 const useStyles = makeStyles({
   root: {
     margin: "1rem 0rem"
@@ -27,6 +29,7 @@ const useStyles = makeStyles({
   }
 );
 
+//soundCloud soundBoard links
 const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soundcloud.com/hampsterdancemasters/the-hamster-dance-song",
 "https://soundcloud.com/tayzonday/chocolate-rain",  "https://soundcloud.com/tayzonday/chocolate-rain", 
 "https://soundcloud.com/xpriteshx/fatality-mortal-kombat-sound-effect", "https://soundcloud.com/mlg_getrekt/sad-violin-music-mlg-sound-1",
@@ -41,25 +44,36 @@ const sounds = ["https://soundcloud.com/shadowlegionary/nyan-cat", "https://soun
 "https://soundcloud.com/search?q=sandstorm", "https://soundcloud.com/kn900/ppap"];
 
 export default function MusicalGIF(props) {
+  //GIPHY authentiction
   const giphyFetch = new GiphyFetch("XIGon8NVdRj2CkMmG1tuAsjsHNjSDVJW");
   const classes = useStyles();
+  //determines if we are loading a link or the homepage
   const [isSet, setisSet] = useState(props.isSet);
+  //unique link extension should the user choose to save
   const [uniqueLinkExt, setuniqueLinkExt] = useState(props.linkExt);
+  //gif metadata
   const [gif, setGif] = useState<IGif | null>(null);
+  //gifID from GIPHY
   const [gifID, setgifID] = useState(props.gifID);
+  //Caption that is displayed to the use
   const [displayCaption, setdisplayCaption] = useState(props.caption);
+  //Caption entered by the user
   const [name, setName] = React.useState("");
+  //Soundcloud link
   const [sound, setSound] = React.useState(props.sound)
 
+  //Updates name when the user types in the textfield
   function handleChange(e){
       setName(e.target.value);
   };
 
+  //Updates Caption when submit button is clicked
   function handleClick(e){
     setdisplayCaption(name)
     setisSet(false);
   };
-
+ 
+  //Overrides refresh when enter is pressed, and updates the displayCaption. Also sets isSet to false.
   function handleKeyPress(e){
     if (e.charCode === 13){
       e.preventDefault();
@@ -68,32 +82,38 @@ export default function MusicalGIF(props) {
     }
   }
 
-
+  //Fetches the GIF ID appropriate to caption
   const fetchGifID = useCallback(async () => {
     if (!isSet){
+      //if not set, we return seven search results based on relevance and we choose one randomly
       const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 7});
       if (result.data.length!==0){
         let randInt = Math.floor(Math.random()*result.data.length);
         setgifID(String(result.data[randInt].id));
       } else {
+        //if no results are return we update display caption and assign an appropriate gif
         setdisplayCaption("No results found!");
         setgifID("UoeaPqYrimha6rdTFV")
       }
     } else {
+      //if set, we want to return the right gifID
       setgifID(props.gifID);
     }
   
   }, [displayCaption])
 
+  //fetch GifID if displayCaption changes
   useEffect(() => {
     fetchGifID();
   }, [displayCaption])
 
+  //fetch gif metadata using ID
   const fetchGif = useCallback(async () => {
     const { data } = await giphyFetch.gif(gifID);
     setGif(data);
     }, [gifID])
-
+  
+  //returns the sound cloud URL
   function returnSoundURL(){{
     if (isSet){
       setSound(props.sound);
@@ -106,6 +126,7 @@ export default function MusicalGIF(props) {
     }
   }}
   
+  //Saves page to Firebase
   function createPage(){
   if (displayCaption !== "No results found!" && displayCaption !== "Musical GIF will never give you up" && displayCaption!=="Invalid Link!") {
     db.collection("creation").add({
@@ -118,6 +139,7 @@ export default function MusicalGIF(props) {
   }
   }
 
+  //If gifID changes, it fetches gif metadata and an appropriate sound. If page is not set, it also chooses a unique link extension.
   useEffect(() => {
     fetchGif();
     returnSoundURL();
@@ -126,6 +148,8 @@ export default function MusicalGIF(props) {
     }
   }, [gifID])
 
+
+  //Renders a link button if isSet is false
   function generateLinkButton(){
     createPage();
     let url = ""
@@ -135,6 +159,7 @@ export default function MusicalGIF(props) {
       } else {
         url = "www.gifii.fun/"+uniqueLinkExt
       }
+    //on click, url is copied onto clipboard and is reset in browser
     if (!isSet){
       return <CopyToClipboard text={url}><Button
       variant="contained"
