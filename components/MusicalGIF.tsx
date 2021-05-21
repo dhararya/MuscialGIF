@@ -142,7 +142,7 @@ export default function MusicalGIF(props) {
       disabled = {false}
       onClick = {() => {
         createPage();
-        window.location.href = url;
+        window.history.replaceState("Unique Link", "GIF", uniqueLinkExt);
       }}
       > GENERATE AND COPY UNIQUE LINK TO CLIPBOARD
       </Button>
