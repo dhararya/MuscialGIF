@@ -83,7 +83,7 @@ export default function MusicalGIF(props) {
   }
 
   //Fetches the GIF ID appropriate to caption
-  const fetchGifID = useCallback(async () => {
+  const fetchGifID = async () => {
     if (!isSet){
       //if not set, we return seven search results based on relevance and we choose one randomly
       const result = await giphyFetch.search(displayCaption, {sort: "relevant", limit: 7});
@@ -100,7 +100,7 @@ export default function MusicalGIF(props) {
       setgifID(props.gifID);
     }
   
-  }, [displayCaption])
+  }
 
   //fetch GifID if displayCaption changes
   useEffect(() => {
@@ -108,10 +108,10 @@ export default function MusicalGIF(props) {
   }, [displayCaption])
 
   //fetch gif metadata using ID
-  const fetchGif = useCallback(async () => {
+  const fetchGif = async () => {
     const { data } = await giphyFetch.gif(gifID);
     setGif(data);
-    }, [gifID])
+    }
   
   //returns the sound cloud URL
   function returnSoundURL(){{
@@ -151,7 +151,6 @@ export default function MusicalGIF(props) {
 
   //Renders a link button if isSet is false
   function generateLinkButton(){
-    createPage();
     let url = ""
     if (typeof window !== "undefined"){
       if (window.location.hostname == "localhost"){
