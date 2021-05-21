@@ -90,31 +90,6 @@ export default function MusicalGIF(props) {
     fetchGifID();
   }, [displayCaption])
 
-  useEffect(() => {
-    fetchGif();
-    returnSoundURL();
-    if (!isSet){
-      setuniqueLinkExt(String(uuidv4()));
-      createPage();
-    }
-  }, [gifID])
-
-  function generateLinkButton(){
-    let url = ""
-    if (typeof window !== 'undefined'){
-      url = window.location.href
-    }
-    if (!isSet){
-      return <CopyToClipboard text={url}><Button
-      variant="contained"
-      color="primary"
-      disabled = {false}
-      > GENERATE AND COPY UNIQUE LINK TO CLIPBOARD
-      </Button>
-      </CopyToClipboard> 
-    }
-  }
-
   const fetchGif = useCallback(async () => {
     const { data } = await giphyFetch.gif(gifID);
     setGif(data);
@@ -141,6 +116,39 @@ export default function MusicalGIF(props) {
       sound: String(sound),
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     })
+  }
+  }
+
+  useEffect(() => {
+    fetchGif();
+    returnSoundURL();
+    if (!isSet){
+      setuniqueLinkExt(String(uuidv4()));
+    }
+  }, [gifID])
+
+  function generateLinkButton(){
+    createPage();
+    let url = ""
+    if (typeof window !== "undefined"){
+      if (window.location.hostname == "localhost"){
+        url = "localhost:3000/"+uniqueLinkExt
+      } else {
+        url = "www.gifii.fun/"+uniqueLinkExt
+      }
+    if (!isSet){
+      return <CopyToClipboard text={url}><Button
+      variant="contained"
+      color="primary"
+      disabled = {false}
+      onClick = {() => {
+        createPage();
+        window.location.href = url;
+      }}
+      > GENERATE AND COPY UNIQUE LINK TO CLIPBOARD
+      </Button>
+      </CopyToClipboard> 
+    }
   }
   }
 
