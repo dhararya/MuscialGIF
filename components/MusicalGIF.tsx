@@ -13,7 +13,6 @@ import { db } from "../utils/firebase/firebase";
 import firebase from "firebase/app";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
 import TextField from '@material-ui/core/TextField';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 const useStyles = makeStyles({
