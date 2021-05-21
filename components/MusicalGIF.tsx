@@ -18,11 +18,11 @@ import OutlinedInput from "@material-ui/core/OutlinedInput";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 const useStyles = makeStyles({
   root: {
-    margin: "1.5rem 1.5rem"
+    margin: "1rem 0rem"
   },
   form: {
     "& > *": {
-      width: "100ch"
+      margin: "0.5rem 0.5rem"
     }
   }
   }
@@ -147,8 +147,8 @@ export default function MusicalGIF(props) {
   return (
     <div>
       <Card className={classes.root}>
-        <CardActionArea>
-          {gif && <Gif gif={gif} width={700}/>}
+        <CardActionArea >
+          {gif && <Gif gif={gif} width={visualViewport.width*0.5}/>}
           <CardContent>
             <Typography variant="body2" color="secondary" component="p">
               {displayCaption}
@@ -156,14 +156,13 @@ export default function MusicalGIF(props) {
           </CardContent>
           <ReactPlayer 
               url= {sound}
-              height= {100}
+              height= {80}
               playing= {true}
               
           />
         </CardActionArea>
       </Card>
-      <form className={classes.form} noValidate autoComplete="off">
-      <FormControl variant="outlined">
+      <FormControl variant="outlined" fullWidth={true}>
         <InputLabel htmlFor="component-outlined">Caption</InputLabel>
         <OutlinedInput
           id="component-outlined"
@@ -181,7 +180,6 @@ export default function MusicalGIF(props) {
 
         {generateLinkButton()}
       </FormControl>
-    </form>
   </div>
   );
 }

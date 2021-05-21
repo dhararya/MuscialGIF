@@ -32,6 +32,7 @@ export default function Page({caption, sound, gifID}){
   return (
     <div className={styles.container}>
       <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height"></meta>
         <title>Musical GIF</title>
       </Head>
 
