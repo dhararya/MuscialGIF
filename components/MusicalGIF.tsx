@@ -133,7 +133,7 @@ export default function MusicalGIF(props) {
       if (window.location.hostname == "localhost"){
         url = "localhost:3000/"+uniqueLinkExt
       } else {
-        url = uniqueLinkExt
+        url = "www.gifii.fun/"+uniqueLinkExt
       }
     if (!isSet){
       return <CopyToClipboard text={url}><Button
