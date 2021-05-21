@@ -14,7 +14,7 @@ import firebase from "firebase/app";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import TextField from '@material-ui/core/TextField';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 const useStyles = makeStyles({
   root: {
@@ -171,12 +171,12 @@ export default function MusicalGIF(props) {
         </CardActionArea>
       </Card>
       <FormControl variant="outlined" fullWidth={true}>
-        <InputLabel htmlFor="component-outlined">Caption</InputLabel>
-        <OutlinedInput
-          id="component-outlined"
+        <TextField
+          id="filled-basic"
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           label="Caption"
+          variant="filled"
         />
         <Button
           variant="contained"
